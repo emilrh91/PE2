@@ -37,7 +37,16 @@ export const LoginModal = ({ show, handleClose, setIsLoggedIn, setUserRole, isMo
         setLoading(false);
       })
       .catch(error => {
-        const apiErrorMessage = error.response?.data?.errors?.[0]?.message || 'An error occurred during login.';
+        let apiErrorMessage = 'An error occurred during login.';
+        if (error.response && error.response.data) {
+          if (error.response.data.errors) {
+            apiErrorMessage = error.response.data.errors.map(err => err.message).join(', ');
+          } else if (error.response.data.message) {
+            apiErrorMessage = error.response.data.message;
+          }
+        } else if (error.message) {
+          apiErrorMessage = error.message;
+        }
         setErrorMessage(apiErrorMessage);
         setLoading(false);
       });
