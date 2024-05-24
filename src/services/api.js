@@ -9,18 +9,18 @@ const getApiKey = () => localStorage.getItem("apiKey");
 const axiosInstance = axios.create({
   baseURL: API_URL,
   headers: {
-    'Content-Type': 'application/json',
-  }
+    "Content-Type": "application/json",
+  },
 });
 
-axiosInstance.interceptors.request.use(config => {
+axiosInstance.interceptors.request.use((config) => {
   const token = getToken();
   const apiKey = getApiKey();
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   if (apiKey) {
-    config.headers['X-Noroff-API-Key'] = apiKey;
+    config.headers["X-Noroff-API-Key"] = apiKey;
   }
   return config;
 });
@@ -31,17 +31,23 @@ export const apiServices = {
       const response = await axios.post(`${USER_URL}/auth/login`, loginData, {
         params: { _holidaze: true },
       });
-      localStorage.setItem("authToken", response.data.data.accessToken);
-      localStorage.setItem("userName", response.data.data.name);
-      localStorage.setItem("venueManager", response.data.data.venueManager);
-      axiosInstance.defaults.headers.Authorization = `Bearer ${response.data.data.accessToken}`;
-      return response.data.data;
+      const userData = response.data.data;
+      localStorage.setItem("authToken", userData.accessToken);
+      localStorage.setItem("userId", userData.id);
+      localStorage.setItem("userName", userData.name);
+      localStorage.setItem("venueManager", userData.venueManager);
+      axiosInstance.defaults.headers.Authorization = `Bearer ${userData.accessToken}`;
+      return userData;
     } catch (error) {
       if (error.response && error.response.data && error.response.data.errors) {
-        const message = error.response.data.errors.map(err => err.message).join(', ');
+        const message = error.response.data.errors
+          .map((err) => err.message)
+          .join(", ");
         throw new Error(message);
       }
-      throw new Error(error.message || 'An unknown error occurred during login.');
+      throw new Error(
+        error.message || "An unknown error occurred during login."
+      );
     }
   },
 
@@ -51,59 +57,91 @@ export const apiServices = {
   },
 
   register: async (registerData) => {
-    const response = await axiosInstance.post(`${USER_URL}/auth/register`, registerData);
-    localStorage.setItem("authToken", response.data.token);
-    localStorage.setItem("userName", response.data.user.name);
-    axiosInstance.defaults.headers.Authorization = `Bearer ${response.data.token}`;
-    return response.data;
+    try {
+      const response = await axiosInstance.post(`${USER_URL}/auth/register`, registerData);
+      const { data } = response;
+      const userData = data.data;
+      if (!userData) {
+        throw new Error('Response data is missing');
+      }
+      if (!userData.email) {
+        throw new Error('Email is missing in the response data');
+      }
+      if (!userData.name) {
+        throw new Error('Name is missing in the response data');
+      }
+      return userData;
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.errors) {
+        const message = error.response.data.errors.map(err => err.message).join(', ');
+        throw new Error(message);
+      }
+      throw new Error(error.message || 'An unknown error occurred during registration.');
+    }
   },
 
-  getProfile: async (name, includeBookings = false) => {
+  getProfile: async (name, includeBookings, includeVenues) => {
     const params = {
       _bookings: includeBookings,
-      _venues: true
+      _venues: includeVenues
     };
     const response = await axiosInstance.get(`/profiles/${name}`, { params });
-    return response.data;
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error('Error fetching profile data.');
+    }
   },
 
   getVenuesWithBookings: async (name) => {
     const params = { _bookings: true };
     const response = await axiosInstance.get(`/profiles/${name}/venues`, { params });
-    return response.data;
-  },
-
-  updateProfile: async (name, updateData) => {
-    const response = await axiosInstance.put(`/profiles/${name}`, updateData);
-    return response.data;
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error('Error fetching venues data.');
+    }
   },
 
   getVenues: async (params) => {
     try {
-      const response = await axiosInstance.get('/venues', { params });
+      const response = await axiosInstance.get("/venues", { params });
       if (response.status !== 200) {
         throw new Error(`Request failed with status code ${response.status}`);
       }
       return response.data;
     } catch (error) {
       if (error.response) {
-        return { success: false, message: `API responded with status: ${error.response.status}` };
+        return {
+          success: false,
+          message: `API responded with status: ${error.response.status}`,
+        };
       } else {
-        return { success: false, message: error.message || "Failed to fetch venues. Please check the console for more details." };
+        return {
+          success: false,
+          message:
+            error.message ||
+            "Failed to fetch venues.",
+        };
       }
     }
   },
 
   createVenue: async (venueData) => {
     try {
-      const response = await axiosInstance.post('/venues', venueData);
+      const response = await axiosInstance.post("/venues", venueData);
       return { success: true, data: response.data };
     } catch (error) {
       if (error.response && error.response.data && error.response.data.errors) {
-        const messages = error.response.data.errors.map(err => err.message).join(', ');
+        const messages = error.response.data.errors
+          .map((err) => err.message)
+          .join(", ");
         return { success: false, message: messages };
       } else {
-        return { success: false, message: "An unexpected error occurred. Please try again." };
+        return {
+          success: false,
+          message: "An unexpected error occurred. Please try again.",
+        };
       }
     }
   },
@@ -125,24 +163,34 @@ export const apiServices = {
   },
 
   searchVenues: async (query) => {
-    const response = await axiosInstance.get('/venues/search', { params: { query } });
+    const response = await axiosInstance.get("/venues/search", {
+      params: { query },
+    });
     return response.data;
   },
 
   getBookings: async () => {
-    const response = await axiosInstance.get('/bookings');
+    const response = await axiosInstance.get("/bookings");
     return response.data;
   },
 
   createBooking: async (bookingData) => {
     try {
-      const response = await axiosInstance.post('/bookings', bookingData);
+      const response = await axiosInstance.post("/bookings", bookingData);
       return { success: true, data: response.data };
     } catch (error) {
       if (error.response) {
-        return { success: false, message: `API responded with status: ${error.response.status}` };
+        return {
+          success: false,
+          message: `API responded with status: ${error.response.status}`,
+        };
       } else {
-        return { success: false, message: error.message || "Failed to create booking. Please check the console for more details." };
+        return {
+          success: false,
+          message:
+            error.message ||
+            "Failed to create booking.",
+        };
       }
     }
   },

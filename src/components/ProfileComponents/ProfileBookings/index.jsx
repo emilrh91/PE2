@@ -11,7 +11,7 @@ export const ProfileBookings = ({ bookings, onEditBooking }) => {
   }
 
   if (bookings.length === 0) {
-    return <div>No bookings found.</div>;
+    return <div><h2>My Bookings</h2>No bookings found.</div>;
   }
 
   return (

@@ -1,6 +1,6 @@
 # Holidaze
 
-Holidaze is a React-based project that allows users to discover, book, and manage accommodations. The project uses Vite as a build tool and includes several popular libraries such as react-bootstrap, React Router, Axios, and more.
+Holidaze is a React-based project that allows users to discover, book, and manage accommodations. The project uses Vite as a build tool and includes several popular libraries such as Bootstrap, react-bootstrap, React Router, Axios, and more.
 
 
 ## Table of Contents
@@ -82,6 +82,7 @@ npm run preview
 * axios: ^1.6.8
 * prop-types: ^15.8.1
 * react: ^18.2.0
+* bootstrap: ^5.3.3
 * react-bootstrap: ^2.10.2
 * react-datepicker: ^6.9.0
 * react-dom: ^18.2.0

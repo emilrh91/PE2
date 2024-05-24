@@ -13,8 +13,8 @@ import "./index.scss";
 
 export const Profile = () => {
   const [profile, setProfile] = useState({
-    banner: { url: '', alt: '' },
-    avatar: { url: '', alt: '' },
+    banner: { url: '' },
+    avatar: { url: '' },
     name: '',
     email: '',
     bookings: [],
@@ -27,24 +27,29 @@ export const Profile = () => {
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [showEditProfileModal, setShowEditProfileModal] = useState(false);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const name = localStorage.getItem("userName");
-        const includeBookings = true;
+        const userName = localStorage.getItem("userName");
+        if (!userName) {
+          setError("User name is not set in local storage");
+          setLoading(false);
+          return;
+        }
 
-        const [profileResponse, venuesResponse] = await Promise.all([
-          apiServices.getProfile(name, includeBookings),
-          apiServices.getVenuesWithBookings(name)
-        ]);
+        const profileResponse = await apiServices.getProfile(userName, true, true);
 
-        setProfile({
-          ...profileResponse.data,
-          venues: venuesResponse.data,
-        });
+        if (profileResponse.data) {
+          setProfile(profileResponse.data);
+        } else {
+          setError("Invalid profile data");
+        }
       } catch (error) {
         setError("Error fetching profile data.");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -94,20 +99,19 @@ export const Profile = () => {
   };
 
   const handleProfileSave = async (updatedProfile) => {
-    const name = localStorage.getItem("userName");
+    const userName = localStorage.getItem("userName");
     try {
-      const response = await apiServices.updateProfile(name, updatedProfile);
+      const response = await apiServices.updateProfile(userName, updatedProfile);
       setProfile((prevProfile) => ({
         ...prevProfile,
-        avatar: response.data.avatar,
-        banner: response.data.banner
+        ...response.data,
       }));
     } catch (error) {
       setError("Error updating profile.");
     }
   };
 
-  if (!profile.name) {
+  if (loading) {
     return (
       <div className="loading-container">
         <Spinner animation="border" variant="primary" />
@@ -120,8 +124,8 @@ export const Profile = () => {
     <Container className="profileContainer">
       <Row className="profileRow">
         <Col className="profileDetails">
-          {profile.banner.url && <ProfileBanner banner={profile.banner} />}
-          {profile.avatar.url && <ProfileAvatar avatar={profile.avatar} />}
+          {profile.banner?.url && <ProfileBanner banner={profile.banner} />}
+          {profile.avatar?.url && <ProfileAvatar avatar={profile.avatar} />}
           {profile.name && profile.email && (
             <ProfileInfo name={profile.name} email={profile.email} />
           )}
@@ -130,12 +134,12 @@ export const Profile = () => {
       </Row>
       <Row className="profileRow">
         <Col>
-          <ProfileBookings bookings={profile.bookings} onEditBooking={handleEditBooking} />
+          <ProfileBookings bookings={profile.bookings || []} onEditBooking={handleEditBooking} />
         </Col>
         {profile.venueManager && (
           <Col>
             <VenueManagerInfo
-              venues={profile.venues}
+              venues={profile.venues || []}
               onEditVenue={handleEditVenue}
             />
           </Col>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Home } from './pages/Home';
 import { Venues } from './pages/Venues';
@@ -14,6 +14,15 @@ export function RoutesComponent() {
   const [isLoggedIn, setIsLoggedInState] = useState(false);
   const [userRole, setUserRoleState] = useState('');
   const [showLogin, setShowLogin] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      setIsLoggedInState(true);
+      const venueManager = localStorage.getItem('venueManager') === 'true';
+      setUserRoleState(venueManager ? 'venueManager' : 'user');
+    }
+  }, []);
 
   const handleShowLogin = () => setShowLogin(true);
   const handleCloseLogin = () => setShowLogin(false);
@@ -40,7 +49,7 @@ export function RoutesComponent() {
         <Route path="/venues" element={<Venues />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/manage-venues" element={<ManageVenues />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/register" element={<Register setIsLoggedIn={setIsLoggedInState} setUserRole={setUserRoleState} />} />
         <Route
           path="/login"
           element={<LoginModal setIsLoggedIn={setIsLoggedInState} setUserRole={setUserRoleState} isModal={false} />}
