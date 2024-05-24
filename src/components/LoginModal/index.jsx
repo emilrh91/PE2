@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { apiServices } from '../../services/api';
 
-export const LoginModal = ({ show, handleClose, setIsLoggedIn, setUserRole }) => {
+export const LoginModal = ({ show, handleClose, setIsLoggedIn, setUserRole, isModal }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -32,7 +32,7 @@ export const LoginModal = ({ show, handleClose, setIsLoggedIn, setUserRole }) =>
       })
       .then(response => {
         localStorage.setItem('apiKey', response.data.key);
-        handleClose();
+        if (handleClose) handleClose();
         setIsLoggedIn(true);
         setLoading(false);
       })
@@ -44,61 +44,76 @@ export const LoginModal = ({ show, handleClose, setIsLoggedIn, setUserRole }) =>
   };
 
   const handleRegister = () => {
-    handleClose();
+    if (handleClose) handleClose();
     navigate('/register');
   };
 
-  return (
-    <Modal show={show} onHide={handleClose} centered>
-      <Modal.Header closeButton>
-        <Modal.Title>Log In</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
-        <Form onSubmit={handleSubmit}>
-          <Form.Group controlId="formEmail" className="mb-3">
-            <Form.Label>Email</Form.Label>
-            <Form.Control 
-              type="email" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-              required 
-            />
-          </Form.Group>
+  const loginForm = (
+    <div className="login-container">
+      {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
+      <Form onSubmit={handleSubmit}>
+        <Form.Group controlId="formEmail" className="mb-3">
+          <Form.Label>Email</Form.Label>
+          <Form.Control 
+            type="email" 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+            required 
+          />
+        </Form.Group>
 
-          <Form.Group controlId="formPassword" className="mb-3">
-            <Form.Label>Password</Form.Label>
-            <Form.Control 
-              type="password" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              required 
-            />
-          </Form.Group>
+        <Form.Group controlId="formPassword" className="mb-3">
+          <Form.Label>Password</Form.Label>
+          <Form.Control 
+            type="password" 
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)} 
+            required 
+          />
+        </Form.Group>
 
-          {loading ? (
-            <div className="text-center">
-              <Spinner animation="border" variant="primary" />
-            </div>
-          ) : (
-            <div className="d-grid gap-2">
-              <Button variant="primary" type="submit">
-                Login
-              </Button>
-              <Button variant="secondary" onClick={handleRegister}>
-                Register new user
-              </Button>
-            </div>
-          )}
-        </Form>
-      </Modal.Body>
-    </Modal>
+        {loading ? (
+          <div className="text-center">
+            <Spinner animation="border" variant="primary" />
+          </div>
+        ) : (
+          <div className="d-grid gap-2">
+            <Button variant="primary" type="submit">
+              Login
+            </Button>
+            <Button variant="secondary" onClick={handleRegister}>
+              Register new user
+            </Button>
+          </div>
+        )}
+      </Form>
+    </div>
   );
+
+  if (isModal) {
+    return (
+      <Modal show={show} onHide={handleClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Log In</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {loginForm}
+        </Modal.Body>
+      </Modal>
+    );
+  }
+
+  return loginForm;
 };
 
 LoginModal.propTypes = {
-  show: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired,
+  show: PropTypes.bool,
+  handleClose: PropTypes.func,
   setIsLoggedIn: PropTypes.func.isRequired,
   setUserRole: PropTypes.func.isRequired,
+  isModal: PropTypes.bool
+};
+
+LoginModal.defaultProps = {
+  isModal: true
 };

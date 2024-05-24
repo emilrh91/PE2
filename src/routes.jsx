@@ -6,10 +6,9 @@ import { VenueDetails } from './pages/VenueDetails';
 import { ManageVenues } from './pages/ManageVenues';
 import { Register } from './pages/Register';
 import { Profile } from './pages/Profile';
-import { Login } from './components/Login';
 import { NavbarComponent } from './components/NavbarComponent';
 import { FooterComponent } from './components/FooterComponent';
-import { Modal } from 'react-bootstrap';
+import { LoginModal } from './components/LoginModal';
 
 export function RoutesComponent() {
   const [isLoggedIn, setIsLoggedInState] = useState(false);
@@ -44,7 +43,7 @@ export function RoutesComponent() {
         <Route path="/register" element={<Register />} />
         <Route
           path="/login"
-          element={<Login setIsLoggedIn={setIsLoggedInState} setUserRole={setUserRoleState} handleClose={handleCloseLogin} />}
+          element={<LoginModal setIsLoggedIn={setIsLoggedInState} setUserRole={setUserRoleState} isModal={false} />}
         />
         <Route path="/" element={<Home />} />
       </Routes>
@@ -52,14 +51,7 @@ export function RoutesComponent() {
         isLoggedIn={isLoggedIn}
         handleShowLogin={handleShowLogin}
       />
-      <Modal show={showLogin} onHide={handleCloseLogin} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Login</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Login setIsLoggedIn={setIsLoggedInState} setUserRole={setUserRoleState} handleClose={handleCloseLogin} />
-        </Modal.Body>
-      </Modal>
+      <LoginModal show={showLogin} handleClose={handleCloseLogin} setIsLoggedIn={setIsLoggedInState} setUserRole={setUserRoleState} />
     </>
   );
 }

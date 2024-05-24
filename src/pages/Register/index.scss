@@ -1,37 +1,29 @@
 .register-container {
-    margin-top: 4em;
-    
-    .card {
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
-    }
-  
-    .card-title {
-      font-size: 1.5em;
-      font-weight: bold;
-      margin-bottom: 1em;
-    }
-  
-    .form-control {
-      border-radius: 8px;
-    }
-  
-    .btn-primary {
-      background-color: #007bff;
-      border-color: #007bff;
-      padding: 0.5em 2em;
-      border-radius: 50px;
-      font-size: 1em;
-      transition: background-color 0.3s;
-  
-      &:hover {
-        background-color: #0056b3;
-        border-color: #0056b3;
-      }
-    }
-  
-    .alert-danger {
-      border-radius: 8px;
-    }
+  margin-top: 4em;
+
+  .card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
   }
-  
+
+  .card-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 1em;
+  }
+
+  .form-control {
+    border-radius: 8px;
+  }
+
+  .btn-primary {
+    padding: 0.5em 2em;
+    border-radius: 50px;
+    font-size: 1em;
+    transition: background-color 0.3s;
+  }
+
+  .alert-danger {
+    border-radius: 8px;
+  }
+}
