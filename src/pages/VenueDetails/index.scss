@@ -1,0 +1,33 @@
+.venue-page {
+  margin-top: 6rem;
+  margin-bottom: 2rem;
+}
+
+.venue-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (max-width: 992px) {
+  .venue-page {
+    margin: 2rem;
+    margin-top: 6rem;
+  }
+
+  .venue-info > * {
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .venue-info {
+    padding: 0;
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  .venue-info > * {
+    margin-bottom: 0.5rem;
+  }
+}

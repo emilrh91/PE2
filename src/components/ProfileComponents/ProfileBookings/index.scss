@@ -1,0 +1,26 @@
+.profile-bookings {
+  h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #343a40;
+  }
+
+  .booking {
+    margin-bottom: 20px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+
+    .list-group-item {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+  .venue-link {
+  cursor: pointer;
+  color: var(--primary-color);
+
+  &:hover {
+    color: darkblue;
+  }
+}
+
+}

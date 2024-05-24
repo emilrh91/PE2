@@ -1,0 +1,40 @@
+.NavbarComponent {
+  background-color: var(--background-color);
+  border-bottom: 1px solid var(--text-color);
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.holidazeLogo-Navbar {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.navbar-toggler {
+  margin-left: auto;
+}
+
+@media (min-width: 992px) {
+  .navbar-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  .holidazeLogo-Navbar {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .navbar-toggler {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}

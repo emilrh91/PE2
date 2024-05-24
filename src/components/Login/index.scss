@@ -1,0 +1,38 @@
+.login-container {
+    .form-control {
+      border-radius: 8px;
+    }
+  
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+      padding: 0.5em 2em;
+      border-radius: 50px;
+      font-size: 1em;
+      transition: background-color 0.3s;
+  
+      &:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+      }
+    }
+  
+    .btn-secondary {
+      background-color: #6c757d;
+      border-color: #6c757d;
+      padding: 0.5em 2em;
+      border-radius: 50px;
+      font-size: 1em;
+      transition: background-color 0.3s;
+  
+      &:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+      }
+    }
+  
+    .alert-danger {
+      border-radius: 8px;
+    }
+  }
+  

@@ -1,0 +1,55 @@
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+:root {
+  --primary-color: #7493e1;
+  --secondary-color: #E1A674;
+  --background-color: #f4f4f4;
+  --text-color: #333333;
+  --header-font-family: "Merriweather", serif;
+  --body-font-family: "Roboto", sans-serif;
+  --logo-font-family: "Poppins", sans-serif;
+}
+
+$primary: #7493e1;
+$secondary: #E1A674;
+$background: #f4f4f4;
+$body-color: #333333;
+
+@import '../node_modules/bootstrap/scss/bootstrap';
+
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--background-color);
+  font-family: var(--body-font-family);
+  color: var(--text-color);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.NavbarComponent {
+  font-family: var(--header-font-family);
+}
+
+.holidazeLogo {
+  font-family: var(--logo-font-family);
+  color: var(--primary-color);
+}
+
+.btn-primary {
+    color: var(--background-color);
+  }
+  
+  .btn-secondary:hover, .btn-secondary:focus, .btn-secondary:active {
+    background-color: darken(#E1A674, 10%); 
+    border-color: darken(#6c757d, 10%); 
+  }

@@ -1,0 +1,28 @@
+.Venues-Container {
+    margin-top: 10rem;
+    margin-bottom: 4rem;
+  }
+  
+  .venuesHero {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  @media (max-width: 768px) {
+    .venuesHero {
+      padding: 0 1rem; 
+    }
+  }
+  
+  .my-row {
+    margin-bottom: 1rem;
+  }
+  
+  .react-datepicker-wrapper {
+    width: 100%;
+  }
+  
+  .react-datepicker__input-container {
+    width: 100%;
+  }
+  

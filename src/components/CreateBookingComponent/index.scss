@@ -1,0 +1,41 @@
+.create-booking {
+
+    max-width: 300px;
+
+
+    margin-top: 20px;
+
+  
+    .booking-field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+  
+      label {
+        font-weight: bold;
+      }
+  
+      .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+      }
+    }
+  
+    button {
+      padding: 10px;
+      color: white;
+      background-color: var(--primary-color);
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      margin-top: 10px;
+  
+      &:hover {
+        background-color: var(--secondary-color);
+      }
+    }
+  }
+
